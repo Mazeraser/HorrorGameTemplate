@@ -19,6 +19,7 @@ namespace Infrastructure.Input
 
         private readonly PlayerInputActions _input;
 
+        [Inject]
         public PlayerInputHandler()
         {
             _input=new PlayerInputActions();

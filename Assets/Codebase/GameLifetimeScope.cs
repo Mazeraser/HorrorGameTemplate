@@ -3,12 +3,16 @@ using Unity.Cinemachine;
 using VContainer;
 using VContainer.Unity;
 using System;
+using System.Collections.Generic;
+using Infrastructure.Events;
 using Infrastructure.Interfaces;
 using Infrastructure.Input;
 using Infrastructure.Time;
 using Infrastructure.Unity;
 using Mechanics.Controllers;
 using Mechanics.Movement;
+using Mechanics.Scripts;
+using Mechanics.Triggers;
 
 namespace Infrastructure
 {
@@ -18,6 +22,9 @@ namespace Infrastructure
         [SerializeField]private PlayerConfig config;
         [SerializeField]private CinemachineCamera playerCamera;
         [SerializeField]private Transform playerTransform;
+
+        [Header("Scripts")]
+        [SerializeField]private List<PassThroughPointScript> pointScripts;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -33,9 +40,19 @@ namespace Infrastructure
                 .AsSelf()
                 .As<IDisposable>(); 
             
-            builder.Register<MovementFactory>(Lifetime.Transient);
+            builder.Register<MovementFactory>(Lifetime.Transient)
+                .WithParameter(controller);
             builder.RegisterEntryPoint<PlayerWalkController>();
             builder.RegisterEntryPoint<PlayerCameraController>();
+
+            builder.RegisterInstance(pointScripts).As<IEnumerable<IGameScript>>();
+
+            builder.Register<EventBus>(Lifetime.Singleton);
+            builder.Register<ScriptsFacade>(Lifetime.Singleton);
+            builder.Register<ScriptsRunner>(Lifetime.Singleton)
+                .AsSelf()
+                .As<IStartable>()
+                .As<IDisposable>();
         }
     }
 }
