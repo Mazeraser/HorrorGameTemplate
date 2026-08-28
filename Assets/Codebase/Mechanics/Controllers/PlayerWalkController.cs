@@ -3,6 +3,7 @@ using VContainer;
 using VContainer.Unity;
 using Infrastructure;
 using Infrastructure.Input;
+using Infrastructure.States;
 using Mechanics.Movement;
 
 namespace Mechanics.Controllers
@@ -13,6 +14,7 @@ namespace Mechanics.Controllers
         private readonly MovementFactory _movementFactory;
         private readonly PlayerConfig _config;
         private readonly PlayerGravity _gravity;
+        private readonly GameStateMachine _stateMachine;
 
         private IMovement _walkMovement;
         private IMovement _runMovement;
@@ -22,12 +24,14 @@ namespace Mechanics.Controllers
             PlayerInputHandler inputHandler,
             MovementFactory movementFactory,
             PlayerConfig config,
-            PlayerGravity gravity)
+            PlayerGravity gravity,
+            GameStateMachine stateMachine)
         {
             _inputHandler = inputHandler;
             _movementFactory = movementFactory;
             _config = config;
             _gravity = gravity;
+            _stateMachine = stateMachine;
         }
 
         void IStartable.Start()
@@ -41,9 +45,11 @@ namespace Mechanics.Controllers
         {
             var inputData = _inputHandler.GetInputData();
 
-            _currentMovement = _config.CanRun && inputData.IsRunning ? _runMovement : _walkMovement;
-
-            ApplyMovement(inputData.Velocity);
+            if (_stateMachine.Current.AllowMovement)
+            {
+                _currentMovement = _config.CanRun && inputData.IsRunning ? _runMovement : _walkMovement;
+                ApplyMovement(inputData.Velocity);
+            }
 
             bool wantsJump = _config.CanJump && inputData.IsJumping;
             _gravity.Update(wantsJump, _config.JumpPower);

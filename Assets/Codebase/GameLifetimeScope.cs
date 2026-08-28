@@ -9,11 +9,13 @@ using Infrastructure.Interfaces;
 using Infrastructure.Input;
 using Infrastructure.Time;
 using Infrastructure.Unity;
+using Infrastructure.States;
 using Mechanics.Controllers;
 using Mechanics.Movement;
 using Mechanics.Scripts;
 using Mechanics.Triggers;
 using Mechanics.Inventory;
+using Mechanics.UI;
 
 namespace Infrastructure
 {
@@ -56,6 +58,12 @@ namespace Infrastructure
                 .As<IDisposable>();
 
             builder.Register<InventoryStorageService>(Lifetime.Singleton);
+
+            builder.Register<GameStateMachine>(Lifetime.Singleton)
+                .AsSelf()
+                .As<ITickable>();
+            builder.Register<UIFactory>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<UIRootController>();
         }
     }
 }
