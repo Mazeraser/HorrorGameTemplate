@@ -1,20 +1,20 @@
-using UnityEngine;
-using Infrastructure.Input;
-using Infrastructure.Time;
-using Infrastructure.Unity;
-using Mechanics.Movement;
+using Infrastructure.Interfaces;
 
 namespace Mechanics.Movement
 {
     public class MovementFactory
     {
-        private CharacterController _controller;
+        private readonly IMovementController _controller;
+        private readonly ITimeProvider _timeProvider;
 
-        public MovementFactory(CharacterController controller)
+        public MovementFactory(IMovementController controller, ITimeProvider timeProvider)
         {
             _controller = controller;
+            _timeProvider = timeProvider;
         }
 
-        public IMovement CreateWalk(float speed) => new MovementWalk(speed, new UnityMovementController(_controller), new UnityTimeProvider());
+        public IMovement CreateWalk(float speed) => new MovementWalk(speed, _controller, _timeProvider);
+
+        public IMovement CreateRun(float walkSpeed, float runSpeed) => new MovementRun(walkSpeed, runSpeed, _controller, _timeProvider);
     }
 }

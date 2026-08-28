@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Infrastructure.Input{
+namespace Infrastructure
+{
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Configs/Player")]
     public class PlayerConfig : ScriptableObject
     {
@@ -9,7 +11,7 @@ namespace Infrastructure.Input{
         [Range(0,5)]public float JumpPower;
         public bool CanJump;
         public bool CanRun;
-        [Range(1,10)]public int inventorySize;
+        [Range(1,10)]public int InventorySize;
         [Range(0,1)]public float Sensitivity;
     }
 }

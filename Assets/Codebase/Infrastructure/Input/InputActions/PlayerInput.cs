@@ -111,6 +111,15 @@ namespace Infrastructure.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf1e9d3a-7c8e-4f2a-9b4d-3a6f8e1c2d5a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -245,6 +254,17 @@ namespace Infrastructure.Input
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a7b6c5d-4e3f-4a2b-9c1d-0f8e7d6c5b4a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -343,6 +363,7 @@ namespace Infrastructure.Input
             m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
             m_Movement_velocity = m_Movement.FindAction("velocity", throwIfNotFound: true);
             m_Movement_Run = m_Movement.FindAction("Run", throwIfNotFound: true);
+            m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
             // Actions
             m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
             m_Actions_Pickup = m_Actions.FindAction("Pickup", throwIfNotFound: true);
@@ -432,6 +453,7 @@ namespace Infrastructure.Input
         private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
         private readonly InputAction m_Movement_velocity;
         private readonly InputAction m_Movement_Run;
+        private readonly InputAction m_Movement_Jump;
         /// <summary>
         /// Provides access to input actions defined in input action map "Movement".
         /// </summary>
@@ -451,6 +473,10 @@ namespace Infrastructure.Input
             /// Provides access to the underlying input action "Movement/Run".
             /// </summary>
             public InputAction @Run => m_Wrapper.m_Movement_Run;
+            /// <summary>
+            /// Provides access to the underlying input action "Movement/Jump".
+            /// </summary>
+            public InputAction @Jump => m_Wrapper.m_Movement_Jump;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -483,6 +509,9 @@ namespace Infrastructure.Input
                 @Run.started += instance.OnRun;
                 @Run.performed += instance.OnRun;
                 @Run.canceled += instance.OnRun;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
 
             /// <summary>
@@ -500,6 +529,9 @@ namespace Infrastructure.Input
                 @Run.started -= instance.OnRun;
                 @Run.performed -= instance.OnRun;
                 @Run.canceled -= instance.OnRun;
+                @Jump.started -= instance.OnJump;
+                @Jump.performed -= instance.OnJump;
+                @Jump.canceled -= instance.OnJump;
             }
 
             /// <summary>
@@ -683,6 +715,13 @@ namespace Infrastructure.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnRun(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnJump(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Actions" which allows adding and removing callbacks.

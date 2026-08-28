@@ -11,6 +11,7 @@ namespace Infrastructure.Input
         public struct PlayerInputData{
             public Vector2 Velocity;
             public bool IsRunning;
+            public bool IsJumping;
             public Vector2 MouseDelta;
             public bool IsPickuping;
             public bool IsThrowing;
@@ -42,6 +43,7 @@ namespace Infrastructure.Input
             {
                 Velocity=_input.Movement.velocity.ReadValue<Vector2>(),
                 IsRunning=_input.Movement.Run.IsPressed(),
+                IsJumping=_input.Movement.Jump.WasPressedThisFrame(),
                 MouseDelta=_input.Actions.Look.ReadValue<Vector2>(),
                 IsPickuping=_input.Actions.Pickup.IsPressed(),
                 IsThrowing=_input.Actions.Throw.IsPressed(),

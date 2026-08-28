@@ -13,6 +13,7 @@ using Mechanics.Controllers;
 using Mechanics.Movement;
 using Mechanics.Scripts;
 using Mechanics.Triggers;
+using Mechanics.Inventory;
 
 namespace Infrastructure
 {
@@ -40,8 +41,8 @@ namespace Infrastructure
                 .AsSelf()
                 .As<IDisposable>(); 
             
-            builder.Register<MovementFactory>(Lifetime.Transient)
-                .WithParameter(controller);
+            builder.Register<MovementFactory>(Lifetime.Transient);
+            builder.Register<PlayerGravity>(Lifetime.Singleton);
             builder.RegisterEntryPoint<PlayerWalkController>();
             builder.RegisterEntryPoint<PlayerCameraController>();
 
@@ -53,6 +54,8 @@ namespace Infrastructure
                 .AsSelf()
                 .As<IStartable>()
                 .As<IDisposable>();
+
+            builder.Register<InventoryStorageService>(Lifetime.Singleton);
         }
     }
 }

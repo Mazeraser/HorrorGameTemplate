@@ -1,5 +1,6 @@
 using UnityEngine;
 using VContainer.Unity;
+using Infrastructure;
 using Infrastructure.Input;
 using Infrastructure.Interfaces;
 
